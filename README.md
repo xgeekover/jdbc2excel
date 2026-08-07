@@ -1,5 +1,13 @@
 # jdbc2excel
 
+[![Python](https://img.shields.io/badge/python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Java](https://img.shields.io/badge/java-8%2B-ED8B00?logo=openjdk&logoColor=white)](https://adoptium.net/)
+[![JDBC](https://img.shields.io/badge/JDBC-jaydebeapi-4B8BBE)](https://pypi.org/project/JayDeBeApi/)
+[![Excel](https://img.shields.io/badge/Excel-openpyxl-217346?logo=microsoftexcel&logoColor=white)](https://openpyxl.readthedocs.io/)
+[![Last Commit](https://img.shields.io/github/last-commit/xgeekover/jdbc2excel)](https://github.com/xgeekover/jdbc2excel/commits/main)
+
+**리포지토리**: https://github.com/xgeekover/jdbc2excel
+
 JDBC로 여러 DBMS에 조회 쿼리를 실행하고, 결과를 서식 있는 엑셀(.xlsx)로 저장하는 도구.
 
 - DBMS별로 엑셀 파일 1개, 쿼리별로 시트(탭) 1개 생성
@@ -16,6 +24,8 @@ JDBC로 여러 DBMS에 조회 쿼리를 실행하고, 결과를 서식 있는 �
 ## 설치
 
 ```bash
+git clone https://github.com/xgeekover/jdbc2excel.git
+cd jdbc2excel
 python3 -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
