@@ -1,0 +1,47 @@
+{
+  "output_dir": "output",
+  "script_file": "script.sql",
+  "fetch_size": 1000,
+  "databases": [
+    {
+      "name": "postgres_dev",
+      "enabled": true,
+      "driver_class": "org.postgresql.Driver",
+      "jdbc_url": "jdbc:postgresql://localhost:5432/mydb",
+      "user": "postgres",
+      "password": "postgres",
+      "jar_files": ["drivers/postgresql-42.7.4.jar"]
+    },
+    {
+      "name": "oracle_prod",
+      "enabled": false,
+      "driver_class": "oracle.jdbc.OracleDriver",
+      "jdbc_url": "jdbc:oracle:thin:@//db.example.com:1521/ORCLPDB1",
+      "user": "scott",
+      "password_env": "ORACLE_PASSWORD",
+      "jar_files": ["drivers/ojdbc11.jar"],
+      "script_file": "script_oracle.sql"
+    },
+    {
+      "name": "mysql_stage",
+      "enabled": false,
+      "driver_class": "com.mysql.cj.jdbc.Driver",
+      "jdbc_url": "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=UTF-8",
+      "user": "root",
+      "password": "secret",
+      "jar_files": ["drivers/mysql-connector-j-8.4.0.jar"]
+    },
+    {
+      "name": "mssql_dw",
+      "enabled": false,
+      "driver_class": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+      "jdbc_url": "jdbc:sqlserver://localhost:1433;databaseName=mydb",
+      "user": "sa",
+      "password": "secret",
+      "jar_files": ["drivers/mssql-jdbc-12.6.1.jre11.jar"],
+      "properties": {
+        "encrypt": "false"
+      }
+    }
+  ]
+}
