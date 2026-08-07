@@ -19,8 +19,7 @@
       "jdbc_url": "jdbc:oracle:thin:@//db.example.com:1521/ORCLPDB1",
       "user": "scott",
       "password_env": "ORACLE_PASSWORD",
-      "jar_files": ["drivers/ojdbc11.jar"],
-      "script_file": "script_oracle.sql"
+      "jar_files": ["drivers/ojdbc11-23.26.3.0.0.jar"]
     },
     {
       "name": "mysql_stage",
@@ -38,7 +37,7 @@
       "jdbc_url": "jdbc:sqlserver://localhost:1433;databaseName=mydb",
       "user": "sa",
       "password": "secret",
-      "jar_files": ["drivers/mssql-jdbc-12.6.1.jre11.jar"],
+      "jar_files": ["drivers/mssql-jdbc-13.4.0.jre11.jar"],
       "properties": {
         "encrypt": "false"
       }
