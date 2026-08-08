@@ -272,6 +272,18 @@ python tests/run_tests.py
   분리될 수 있다. 그런 경우 `@separator`를 `@@` 같은 특수 구분자로 바꿔 사용한다.
 - **DATE 컬럼**: jaydebeapi 기본 변환에 따라 `'2024-01-15'` 형태의 문자열로 기록된다.
 
+## 릴리스
+
+```bash
+./release.sh 1.1.0            # v1.1.0 릴리스 생성
+./release.sh 1.1.0 --dry-run  # 점검·테스트·zip 빌드까지만 (태그·푸시 안 함)
+```
+
+사전 점검(main 브랜치·클린 워킹트리·origin 동기화·태그 중복) → 회귀 테스트 →
+`git archive`로 소스 zip 빌드 → 태그 푸시 → GitHub Release 생성(자동 릴리스 노트 + zip 첨부)
+순서로 진행하며, 어느 단계든 실패하면 중단된다. 릴리스 생성 단계에서 실패한 경우
+태그가 HEAD를 가리키고 있으면 같은 명령을 다시 실행해 이어서 진행할 수 있다.
+
 ## 폴더 구조
 
 ```
@@ -282,6 +294,7 @@ jdbc2excel/
 ├── verifier.py        # 저장된 엑셀 ↔ DB 결과 셀 단위 대조
 ├── sql_script.py      # script.sql 파서 (@separator / @tab)
 ├── tests/run_tests.py # 회귀 테스트 (파서·서식·유니코드·검증기)
+├── release.sh         # 릴리스 자동화 (점검→테스트→zip→태그→Release)
 ├── config.json        # DBMS 설정
 ├── script.sql         # 실행할 쿼리 목록
 ├── requirements.txt   # 파이썬 의존성 (jaydebeapi, JPype1, openpyxl)
