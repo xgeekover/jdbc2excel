@@ -37,12 +37,18 @@ ERROR_FONT = Font(bold=True, color="CC0000")
 
 
 def write_workbook(path, results):
-    """QueryResult 목록을 시트별로 나눠 하나의 엑셀 파일로 저장한다."""
+    """QueryResult 목록을 시트별로 나눠 하나의 엑셀 파일로 저장한다.
+
+    검증(verifier)에 쓸 수 있도록 (시트명, QueryResult) 목록을 돌려준다.
+    """
     wb = Workbook()
     wb.remove(wb.active)
     used_names = set()
+    sheet_map = []
     for res in results:
-        ws = wb.create_sheet(_unique_sheet_name(res.tab, used_names))
+        title = _unique_sheet_name(res.tab, used_names)
+        ws = wb.create_sheet(title)
+        sheet_map.append((title, res))
         if res.error is not None:
             _write_error(ws, res)
         else:
@@ -50,11 +56,19 @@ def write_workbook(path, results):
     if not wb.sheetnames:
         wb.create_sheet("결과 없음")
     wb.save(path)
+    return sheet_map
+
+
+def _set_cell(ws, row, column, value):
+    cell = ws.cell(row=row, column=column, value=_clean(value))
+    if isinstance(cell.value, str) and cell.value.startswith("="):
+        cell.data_type = "s"  # '='로 시작하는 데이터가 수식으로 해석되는 것을 방지
+    return cell
 
 
 def _write_table(ws, columns, rows):
     for c, col_name in enumerate(columns, 1):
-        cell = ws.cell(row=1, column=c, value=_clean(col_name))
+        cell = _set_cell(ws, 1, c, col_name)
         cell.font = HEADER_FONT
         cell.fill = HEADER_FILL
         cell.border = BORDER
@@ -68,7 +82,7 @@ def _write_table(ws, columns, rows):
         )
     for r, row in enumerate(rows[:n_rows], 2):
         for c, value in enumerate(row, 1):
-            cell = ws.cell(row=r, column=c, value=_clean(value))
+            cell = _set_cell(ws, r, c, value)
             cell.border = BORDER
             cell.alignment = CELL_ALIGN
 
@@ -87,7 +101,7 @@ def _write_error(ws, res):
         head.font = ERROR_FONT if r == 1 else HEADER_FONT
         head.border = BORDER
         head.alignment = HEADER_ALIGN
-        body = ws.cell(row=r, column=2, value=_clean(value))
+        body = _set_cell(ws, r, 2, value)
         body.border = BORDER
         body.alignment = CELL_ALIGN
     ws.column_dimensions["A"].width = 10

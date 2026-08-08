@@ -83,6 +83,7 @@ def main():
     default_script = conf.get("script_file", "script.sql")
     output_dir = _resolve(base, conf.get("output_dir", "output"))
     fetch_size = int(conf.get("fetch_size", 1000))
+    verify = bool(conf.get("verify", True))
 
     scripts = {}
     for db in databases:
@@ -139,11 +140,28 @@ def main():
             continue
 
         out_path = output_dir / f"{name}_{timestamp}.xlsx"
-        write_workbook(out_path, results)
+        sheet_map = write_workbook(out_path, results)
         ok = sum(1 for r in results if r.error is None)
         if ok < len(results):
             had_error = True
         log.info("[%s] 쿼리 %d/%d개 성공 → %s", name, ok, len(results), out_path)
+
+        if verify:
+            from verifier import verify_workbook
+
+            mismatches = verify_workbook(out_path, sheet_map)
+            if mismatches:
+                had_error = True
+                for m in mismatches[:10]:
+                    log.error("[%s] 검증 불일치: %s", name, m)
+                if len(mismatches) > 10:
+                    log.error("[%s] ... 외 %d건", name, len(mismatches) - 10)
+            else:
+                total_rows = sum(len(r.rows) for r in results if r.error is None)
+                log.info(
+                    "[%s] 엑셀 검증 통과: 시트 %d개, 총 %d행 셀 단위 일치",
+                    name, ok, total_rows,
+                )
 
     return 1 if had_error else 0
 
